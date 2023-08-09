@@ -1,8 +1,37 @@
 import Image from 'next/image'
 import illustrationSignUpDesktop from '@/public/illustration-sign-up-desktop.svg'
 import iconList from '@/public/icon-list.svg'
+import React, { useState } from 'react'
+import { z } from 'zod'
+
+const emailValidation = z.string().email()
 
 const Home = () => {
+  const [email, setEmail] = useState('')
+  const [validEmail, setValidEmail] = useState(true)
+
+  const handleEmailInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newEmail = event.target.value
+    setEmail(newEmail)
+  }
+
+  const handleSubmit = (event: React.FormEvent) => {
+    event.preventDefault()
+
+    try {
+      emailValidation.parse(email)
+      setValidEmail(true)
+    } catch (error) {
+      setValidEmail(false)
+    }
+
+    try {
+      emailValidation.parse(email)
+      console.log('Email is valid', email)
+    } catch (error) {
+      console.error('Invalid email', email)
+    }
+  }
   return (
     <main className="bg-charcoalGrey flex justify-center items-center h-screen">
       <div className="modal bg-white w-[930px] h-[645px] rounded-3xl flex">
@@ -31,25 +60,54 @@ const Home = () => {
               <span className="ml-[18px]">And much more!</span>
             </li>
           </ul>
-          <form action="" method="post" className="mt-[32px] ">
+          <form
+            action=""
+            method="post"
+            onSubmit={handleSubmit}
+            className="mt-[32px] "
+          >
             <label htmlFor="email" className="">
-              <span className="font-bold text-xs text-darkSlateGray">
-                Email address
-              </span>
+              <div className="flex justify-between">
+                <span className="font-bold text-xs text-darkSlateGray">
+                  Email address
+                </span>
+                {!validEmail && (
+                  <span className="font-bold text-xs text-[#ff8c82]">
+                    Valid email required
+                  </span>
+                )}
+              </div>
               <br />
-              <input
-                type="text"
-                name="email"
-                placeholder="email@company.com"
-                className="h-[54px] w-full border-solid border-grey border-[1px] rounded-lg p-7 mt-[14px] mb-[30px] focus:outline-none focus:border-darkSlateGray"
-              />
+              {!validEmail && (
+                <input
+                  type="text"
+                  name="email"
+                  placeholder="email@company.com"
+                  required
+                  value={email}
+                  onChange={handleEmailInput}
+                  className="h-[54px] w-full border-solid border-[#be7f7a] border-[1px] rounded-lg p-7 mt-[14px] mb-[30px] focus:outline-none focus:border-darkSlateGray bg-[#fee9e8] text-[#c77975]"
+                />
+              )}
+              {validEmail && (
+                <input
+                  type="text"
+                  name="email"
+                  placeholder="email@company.com"
+                  required
+                  value={email}
+                  onChange={handleEmailInput}
+                  className="h-[54px] w-full border-solid border-grey border-[1px] rounded-lg p-7 mt-[14px] mb-[30px] focus:outline-none focus:border-darkSlateGray"
+                />
+              )}
             </label>
 
-            <input
-              type="button"
-              value="Subscribe to monthly newsletter"
-              className="h-[54px] w-full rounded-lg text-white font-bold bg-darkSlateGray hover:bg-gradient-to-r from-[#fe527a] to-tomato hover:transition-all"
-            />
+            <button
+              type="submit"
+              className="h-[54px] w-full rounded-lg text-white font-bold bg-darkSlateGray hover:bg-gradient-to-r from-[#fe527a] to-tomato"
+            >
+              Subscribe to monthly newsletter
+            </button>
           </form>
         </div>
         <div className="right-side flex justify-center items-center ml-3">
