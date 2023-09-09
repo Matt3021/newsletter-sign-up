@@ -3,12 +3,14 @@ import illustrationSignUpDesktop from '@/public/illustration-sign-up-desktop.svg
 import iconList from '@/public/icon-list.svg'
 import React, { useState } from 'react'
 import { z } from 'zod'
+import { useRouter } from 'next/router'
 
 const emailValidation = z.string().email()
 
 const Home = () => {
   const [email, setEmail] = useState('')
   const [validEmail, setValidEmail] = useState(true)
+  const router = useRouter()
 
   const handleEmailInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newEmail = event.target.value
@@ -21,6 +23,9 @@ const Home = () => {
     try {
       emailValidation.parse(email)
       setValidEmail(true)
+      if (validEmail) {
+        router.push(`/sucess?email=${encodeURIComponent(email)}`)
+      }
     } catch (error) {
       setValidEmail(false)
     }
