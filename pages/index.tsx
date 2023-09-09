@@ -24,13 +24,6 @@ const Home = () => {
     } catch (error) {
       setValidEmail(false)
     }
-
-    try {
-      emailValidation.parse(email)
-      console.log('Email is valid', email)
-    } catch (error) {
-      console.error('Invalid email', email)
-    }
   }
   return (
     <main className="bg-charcoalGrey flex justify-center items-center h-screen">
